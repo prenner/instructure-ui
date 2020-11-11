@@ -25,6 +25,7 @@
   "dependencies": {
     "@babel/runtime": "^7.9.2",
     "@instructure/console": "^7.3.0",
+    "@instructure/emotion": "^7.3.0",
     "@instructure/ui-color-utils": "^7.3.0",
     "@instructure/ui-dom-utils": "^7.3.0",
     "@instructure/ui-icons": "^7.3.0",

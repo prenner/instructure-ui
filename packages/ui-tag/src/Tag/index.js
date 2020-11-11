@@ -21,19 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 
 import { IconXSolid } from '@instructure/ui-icons'
 import { View } from '@instructure/ui-view'
-import { themeable, ThemeablePropTypes } from '@instructure/ui-themeable'
+import { ThemeablePropTypes } from '@instructure/ui-themeable'
+import { useStyle } from '@instructure/emotion'
+import generateStyle from './styles'
 import { omitProps } from '@instructure/ui-react-utils'
-import { isActiveElement } from '@instructure/ui-dom-utils'
-import { testable } from '@instructure/ui-testable'
-
-import styles from './styles.css'
-import theme from './theme'
+import { withTestable } from '@instructure/ui-testable'
 
 /**
 ---
@@ -41,63 +38,34 @@ category: components
 ---
 **/
 
-@testable()
-@themeable(theme, styles)
-class Tag extends Component {
-  static propTypes = {
-    className: PropTypes.string,
-    text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-    title: PropTypes.string,
-    /**
-     * Whether or not to disable the tag
-     */
-    disabled: PropTypes.bool,
-    /**
-     * Works just like disabled but keeps the same styles as if it were active
-     */
-    readOnly: PropTypes.bool,
-    dismissible: PropTypes.bool,
-    /**
-    * Valid values are `0`, `none`, `auto`, `xxxx-small`, `xx-small`, `x-small`,
-    * `small`, `medium`, `large`, `x-large`, `xx-large`. Apply these values via
-    * familiar CSS-like shorthand. For example: `margin="small auto large"`.
-    */
-    margin: ThemeablePropTypes.spacing,
-    /**
-    * If you add an onClick prop, Tag renders as a clickable button
-    */
-    onClick: PropTypes.func,
-    /**
-    * Provides a reference to the underlying html root element
-    */
-    elementRef: PropTypes.func,
-    size: PropTypes.oneOf(['small', 'medium', 'large']),
-    variant: PropTypes.oneOf(['default', 'inline'])
-  }
+const Tag = (props) => {
+  const styles = useStyle(Tag.name, generateStyle, props, {
+    dismissible,
+    disabled,
+    readOnly,
+    size,
+    text,
+    title,
+    onClick,
+    margin,
+    variant
+  })
 
-  static defaultProps = {
-    size: 'medium',
-    dismissible: false,
-    variant: 'default',
-    elementRef: undefined,
-    className: undefined,
-    title: undefined,
-    disabled: false,
-    readOnly: false,
-    margin: undefined,
-    onClick: undefined
-  }
+  // Todo: ref, public focus method
+  // get focused () {
+  //   return isActiveElement(this._container)
+  // }
+  //
+  // focus = () => {
+  //   this._container && this._container.focus()
+  // }
+  //
+  // handleRef = (node) => {
+  //   this._container = node
+  // }
 
-  get focused () {
-    return isActiveElement(this._container)
-  }
-
-  focus = () => {
-    this._container && this._container.focus()
-  }
-
-  handleClick = (e) => {
-    const { disabled, readOnly, onClick } = this.props
+  const handleClick = (e) => {
+    const { disabled, readOnly, onClick } = props
 
     if (disabled || readOnly) {
       e.preventDefault()
@@ -106,63 +74,100 @@ class Tag extends Component {
       onClick(e)
     }
   }
+  const {
+    className,
+    dismissible,
+    disabled,
+    readOnly,
+    size,
+    text,
+    title,
+    onClick,
+    margin,
+    variant
+  } = props
 
-  handleRef = (node) => {
-    this._container = node
-  }
+  // const classes = {
+  //   [styles.root]: true,
+  //   [styles[variant]]: true,
+  //   [styles[size]]: size,
+  //   [styles.dismissible]: dismissible,
+  //   [styles.button]: onClick,
+  //   [styles.disabled]: disabled
+  // }
 
-  render () {
-    const {
-      className,
-      dismissible,
-      disabled,
-      readOnly,
-      size,
-      text,
-      title,
-      onClick,
-      margin,
-      variant
-    } = this.props
+  const passthroughProps = View.omitViewProps(
+    omitProps(props, Tag.propTypes),
+    Tag
+  )
 
-    const classes = {
-      [styles.tagRoot]: true,
-      [styles[variant]]: true,
-      [styles[size]]: size,
-      [styles.dismissible]: dismissible,
-      [styles.button]: onClick,
-      [styles.disabled]: disabled
-    }
-
-    const passthroughProps = View.omitViewProps(
-      omitProps(this.props, Tag.propTypes),
-      Tag
-    )
-
-    return (
-      <View
-        {...passthroughProps}
-        ref={this.handleRef}
-        elementRef={this.props.elementRef}
-        className={classNames(className, classes)}
-        as={(onClick) ? 'button' : 'span'}
-        margin={margin}
-        type={(onClick) ? 'button' : null}
-        onClick={(onClick) ? this.handleClick : null}
-        disabled={disabled || readOnly}
-        display={null}
-        title={title || ((typeof text === 'string') ? text : null)}
-      >
-        <span className={styles.text}>
-          {text}
-        </span>
-        {(onClick && dismissible)
-          ? <IconXSolid className={styles.icon} /> : null
-        }
-      </View>
-    )
-  }
+  return (
+    <View
+      {...passthroughProps}
+      // ref={this.handleRef}
+      elementRef={props.elementRef}
+      className={className}
+      css={styles.root}
+      as={onClick ? 'button' : 'span'}
+      margin={margin}
+      type={onClick ? 'button' : null}
+      onClick={onClick ? handleClick : null}
+      disabled={disabled || readOnly}
+      display={null}
+      title={title || (typeof text === 'string' ? text : null)}
+    >
+      <span className={styles.text}>{text}</span>
+      {onClick && dismissible ? <IconXSolid className={styles.icon} /> : null}
+    </View>
+  )
 }
 
-export default Tag
-export { Tag }
+Tag.propTypes = {
+  className: PropTypes.string,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  title: PropTypes.string,
+  /**
+   * Whether or not to disable the tag
+   */
+  disabled: PropTypes.bool,
+  /**
+   * Works just like disabled but keeps the same styles as if it were active
+   */
+  readOnly: PropTypes.bool,
+  dismissible: PropTypes.bool,
+  /**
+   * Valid values are `0`, `none`, `auto`, `xxxx-small`, `xx-small`, `x-small`,
+   * `small`, `medium`, `large`, `x-large`, `xx-large`. Apply these values via
+   * familiar CSS-like shorthand. For example: `margin="small auto large"`.
+   */
+  margin: ThemeablePropTypes.spacing,
+  /**
+   * If you add an onClick prop, Tag renders as a clickable button
+   */
+  onClick: PropTypes.func,
+  /**
+   * Provides a reference to the underlying html root element
+   */
+  elementRef: PropTypes.func,
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  variant: PropTypes.oneOf(['default', 'inline'])
+}
+
+Tag.defaultProps = {
+  size: 'medium',
+  dismissible: false,
+  variant: 'default',
+  elementRef: undefined,
+  className: undefined,
+  title: undefined,
+  disabled: false,
+  readOnly: false,
+  margin: undefined,
+  onClick: undefined
+}
+
+//TODO: remove this HOC call when we implement a new testing solution
+const Tag__Testable = withTestable(Tag)
+
+export default Tag__Testable
+export { Tag__Testable as Tag }
