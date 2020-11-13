@@ -25,6 +25,7 @@
 import React, { useState } from 'react'
 import { Avatar } from '@instructure/ui-avatar'
 import { Tag } from '@instructure/ui-tag'
+import { Breadcrumb, BreadcrumbLink } from '@instructure/ui-breadcrumb'
 
 const components = {
   Avatar: [
@@ -35,6 +36,17 @@ const components = {
       margin="0 small 0 0"
     />,
     <Avatar key={'key2'} name="Rarah Sobinson" margin="0 small 0 0" />
+  ],
+  Breadcrumb: [
+    <Breadcrumb key={'breadcrumb1'} label={'Teszt'}>
+      <BreadcrumbLink key="breadcrumbLink1" onClick={() => {}}>
+        English 204
+      </BreadcrumbLink>
+      <BreadcrumbLink key="breadcrumbLink2" href="#">
+        The Rabbit Novels
+      </BreadcrumbLink>
+      <BreadcrumbLink key="breadcrumbLink3">Rabbit Is Rich</BreadcrumbLink>
+    </Breadcrumb>
   ],
   Tag: [<Tag key={'tag1'} text={'This is a Tag'} />]
 }
