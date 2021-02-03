@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /*
  * The MIT License (MIT)
  *
@@ -307,8 +308,10 @@ class Popover extends Component {
     /**
      * __Deprecated - use `onShowContent` and `onHideContent`__
      */
-    onToggle: PropTypes.func
-    /* eslint-enable react/require-default-props */
+    onToggle: PropTypes.func,
+    dir: PropTypes.oneOf(Object.values(bidirectional.DIRECTION)),
+    rtl: PropTypes.bool,
+    ltr: PropTypes.bool
   }
 
   static defaultProps = {
@@ -470,9 +473,9 @@ class Popover extends Component {
   }
 
   get placement() {
-    let { placement } = this.props
+    let { placement, rtl } = this.props
 
-    if (this.rtl) {
+    if (rtl) {
       placement = mirrorHorizontalPlacement(placement, ' ')
     }
 
@@ -778,7 +781,7 @@ class Popover extends Component {
           ...viewProps,
           // TODO: remove background override after contextview is updated
           background: color === 'primary' ? 'default' : 'inverse',
-          placement: this.rtl
+          placement: this.props.rtl
             ? mirrorHorizontalPlacement(placement, ' ')
             : placement
         }
