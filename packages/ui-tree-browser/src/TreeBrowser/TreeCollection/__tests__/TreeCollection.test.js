@@ -138,6 +138,32 @@ describe('<TreeCollection />', async () => {
       expect(item.getAttribute('aria-selected')).to.exist()
     })
 
+    it('should render children for root and child collections', async () => {
+      await mount(
+        <TreeCollection
+          id={1}
+          name="Coll 1"
+          collections={[
+            {
+              id: 2,
+              name: 'Coll 2',
+              descriptor: 'Another Descriptor',
+              children: <input id="input-two" />
+            }
+          ]}
+          items={[]}
+          collectionIcon={() => IconFolder}
+          collectionIconExpanded={() => IconFolder}
+          itemIcon={() => IconDocument}
+          expanded={true}
+        >
+          <input id="input-one" />
+        </TreeCollection>
+      )
+      expect(await find('#input-one')).to.exist()
+      expect(await find('#input-two')).to.exist()
+    })
+
     describe('onCollectionClick', async () => {
       it('should return the correct collection params on click', async () => {
         const onCollectionClick = stub()

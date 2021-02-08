@@ -394,6 +394,25 @@ describe('<TreeBrowser />', async () => {
         expect(onCollectionClick).to.have.been.calledThrice()
       })
     })
+
+    it('should render children of the provided collection', async () => {
+      await mount(
+        <TreeBrowser
+          collections={{
+            2: {
+              id: 2,
+              name: 'Root Directory',
+              collections: [],
+              items: [],
+              children: <input id="input-one" />
+            }
+          }}
+          items={{}}
+          rootId={2}
+        />
+      )
+      expect(await find('#input-one')).to.exist()
+    })
   })
 
   describe('items', async () => {
