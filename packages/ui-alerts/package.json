@@ -31,8 +31,7 @@
   "devDependencies": {
     "@instructure/ui-babel-preset": "^7.3.1",
     "@instructure/ui-color-utils": "^7.3.1",
-    "@instructure/ui-test-utils": "^7.3.1",
-    "@instructure/ui-themes": "^7.3.1"
+    "@instructure/ui-test-utils": "^7.3.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
@@ -43,6 +42,7 @@
     "@instructure/ui-motion": "^7.3.1",
     "@instructure/ui-react-utils": "^7.3.1",
     "@instructure/ui-themeable": "^7.3.1",
+    "@instructure/ui-themes": "^7.3.1",
     "@instructure/ui-utils": "^7.3.1",
     "@instructure/ui-view": "^7.3.1",
     "@instructure/uid": "^7.3.1",
