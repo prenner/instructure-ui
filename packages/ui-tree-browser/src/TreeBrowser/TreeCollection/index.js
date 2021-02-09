@@ -70,7 +70,7 @@ class TreeCollection extends Component {
     numChildren: PropTypes.number,
     level: PropTypes.number,
     position: PropTypes.number,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func])
+    children: PropTypes.node
   }
 
   static defaultProps = {
