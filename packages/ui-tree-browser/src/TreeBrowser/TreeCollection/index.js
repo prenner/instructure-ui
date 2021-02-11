@@ -28,10 +28,10 @@ import classnames from 'classnames'
 
 import { themeable } from '@instructure/ui-themeable'
 import { testable } from '@instructure/ui-testable'
-
+import { safeCloneElement } from '@instructure/ui-react-utils'
 // remove when Edge sorts out styles-on-pseudo-elements issues:
 // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11495448/
-import { isEdge } from '@instructure/ui-utils'
+import { isEdge, createChainedFunction } from '@instructure/ui-utils'
 
 import { TreeButton } from '../TreeButton'
 
@@ -70,7 +70,8 @@ class TreeCollection extends Component {
     numChildren: PropTypes.number,
     level: PropTypes.number,
     position: PropTypes.number,
-    children: PropTypes.node
+    beforeCollection: PropTypes.node,
+    afterCollection: PropTypes.node
   }
 
   static defaultProps = {
@@ -93,7 +94,8 @@ class TreeCollection extends Component {
     numChildren: undefined,
     level: undefined,
     position: undefined,
-    children: null
+    beforeCollection: null,
+    afterCollection: null
   }
 
   constructor(props) {
@@ -153,25 +155,90 @@ class TreeCollection extends Component {
   }
 
   renderChildren() {
-    const { expanded, collections, items, name } = this.props
+    const {
+      expanded,
+      collections,
+      items,
+      name,
+      id,
+      beforeCollection,
+      afterCollection
+    } = this.props
+    const showList = this.childCount > 0 || beforeCollection || afterCollection
+    return (
+      expanded && (
+        <>
+          {showList && (
+            <ul aria-label={name} className={styles.list} role="group">
+              {this.renderCollectionChildren(id, beforeCollection, 'before')}
+              {collections.map((collection, i) => {
+                return this.renderCollectionNode(collection, i, this.childCount)
+              })}
+              {items.map((item, i) => {
+                return this.renderItemNode(
+                  item,
+                  i,
+                  this.childCount,
+                  this.collectionsCount
+                )
+              })}
+              {this.renderCollectionChildren(id, afterCollection, 'after')}
+            </ul>
+          )}
+        </>
+      )
+    )
+  }
+
+  renderCollectionChildren(collectionId, child, arg) {
+    const {
+      selection,
+      onKeyDown,
+      onItemClick,
+      getItemProps,
+      level
+    } = this.props
+    if (!child) {
+      return
+    }
+    const ariaSelected = {}
+    const key = `${collectionId}_${arg}`
+    if (selection) {
+      ariaSelected['aria-selected'] = selection === `item_${key}`
+    }
+
+    const itemHash = { id: key, type: 'item' }
+
+    const itemProps = getItemProps({
+      selected: selection === `item_${key}`,
+      focused: this.state.focused === `item_${key}` ? true : false,
+      onBlur: (e) => {
+        this[`${key}_ref`].focus()
+        e.stopPropagation()
+      }
+    })
 
     return (
-      expanded &&
-      this.childCount > 0 && (
-        <ul aria-label={name} className={styles.list} role="group">
-          {collections.map((collection, i) => {
-            return this.renderCollectionNode(collection, i, this.childCount)
-          })}
-          {items.map((item, i) => {
-            return this.renderItemNode(
-              item,
-              i,
-              this.childCount,
-              this.collectionsCount
-            )
-          })}
-        </ul>
-      )
+      <li
+        role="treeitem"
+        className={styles.item}
+        tabIndex="-1"
+        key={key}
+        ref={(element) => (this[`${key}_ref`] = element)}
+        aria-level={level + 1}
+        {...ariaSelected}
+        onFocus={(e, n) => this.handleFocus(e, itemHash)}
+        onClick={(e, n) =>
+          createChainedFunction(
+            child.props?.onClick(e, itemHash),
+            onItemClick(e, itemHash)
+          )
+        }
+        onKeyDown={(e, n) => onKeyDown(e, itemHash)}
+        onBlur={(e, n) => this.handleBlur(e, itemHash)}
+      >
+        {safeCloneElement(child, { ...itemProps })}
+      </li>
     )
   }
 
@@ -189,9 +256,9 @@ class TreeCollection extends Component {
         numChildren={childCount}
         level={this.props.level + 1}
         position={i + 1}
-      >
-        {collection.children}
-      </TreeCollection>
+        beforeCollection={collection.beforeCollection}
+        afterCollection={collection.afterCollection}
+      />
     )
   }
 
@@ -281,37 +348,32 @@ class TreeCollection extends Component {
         this.props.selection === `collection_${id}`
 
     return (
-      <>
-        <li
-          className={classnames(classes)}
-          tabIndex="-1"
-          role="treeitem"
-          aria-label={this.props.name}
-          aria-level={level}
-          aria-posinset={position}
-          aria-setsize={this.props.numChildren}
-          aria-expanded={expanded}
-          onClick={this.handleCollectionClick}
-          onKeyDown={this.handleCollectionKeyDown}
-          onFocus={(e, n) =>
-            this.handleFocus(e, { id: id, type: 'collection' })
-          }
-          onBlur={(e, n) => this.handleBlur(e, { id: id, type: 'collection' })}
-          {...ariaSelected}
-        >
-          <TreeButton
-            {...this.getCommonButtonProps()}
-            expanded={expanded}
-            collectionIcon={collectionIcon}
-            collectionIconExpanded={collectionIconExpanded}
-            type="collection"
-            selected={this.props.selection === `collection_${id}`}
-            focused={this.state.focused === `collection_${id}`}
-          />
-          {this.renderChildren()}
-        </li>
-        {this.props.children}
-      </>
+      <li
+        className={classnames(classes)}
+        tabIndex="-1"
+        role="treeitem"
+        aria-label={this.props.name}
+        aria-level={level}
+        aria-posinset={position}
+        aria-setsize={this.props.numChildren}
+        aria-expanded={expanded}
+        onClick={this.handleCollectionClick}
+        onKeyDown={this.handleCollectionKeyDown}
+        onFocus={(e, n) => this.handleFocus(e, { id: id, type: 'collection' })}
+        onBlur={(e, n) => this.handleBlur(e, { id: id, type: 'collection' })}
+        {...ariaSelected}
+      >
+        <TreeButton
+          {...this.getCommonButtonProps()}
+          expanded={expanded}
+          collectionIcon={collectionIcon}
+          collectionIconExpanded={collectionIconExpanded}
+          type="collection"
+          selected={this.props.selection === `collection_${id}`}
+          focused={this.state.focused === `collection_${id}`}
+        />
+        {this.renderChildren()}
+      </li>
     )
   }
 }

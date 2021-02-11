@@ -30,7 +30,11 @@ import { themeable } from '@instructure/ui-themeable'
 import { testable } from '@instructure/ui-testable'
 import { isIE11 } from '@instructure/ui-utils'
 import { Img } from '@instructure/ui-img'
-import { callRenderProp } from '@instructure/ui-react-utils'
+import {
+  callRenderProp,
+  getElementType,
+  safeCloneElement
+} from '@instructure/ui-react-utils'
 
 import styles from './styles.css'
 import theme from './theme'
@@ -61,10 +65,14 @@ class TreeButton extends Component {
     onClick: PropTypes.func,
     expanded: PropTypes.bool,
     selected: PropTypes.bool,
-    focused: PropTypes.bool
+    focused: PropTypes.bool,
+    as: PropTypes.elementType,
+    children: PropTypes.node,
+    onBlur: PropTypes.func
   }
 
   static defaultProps = {
+    as: 'button',
     type: 'treeButton',
     size: 'medium',
     variant: 'folderTree',
@@ -78,7 +86,9 @@ class TreeButton extends Component {
     itemIcon: undefined,
     thumbnail: undefined,
     expanded: false,
-    descriptor: undefined
+    descriptor: undefined,
+    onBlur: function () {},
+    children: undefined
   }
 
   renderImage() {
@@ -107,7 +117,6 @@ class TreeButton extends Component {
 
   renderItemImage() {
     const { thumbnail, itemIcon } = this.props
-
     if (thumbnail) {
       return (
         <div className={styles.thumbnail}>
@@ -129,7 +138,9 @@ class TreeButton extends Component {
       selected,
       focused,
       variant,
-      size
+      size,
+      children,
+      onBlur
     } = this.props
 
     const classes = {
@@ -141,10 +152,11 @@ class TreeButton extends Component {
       [styles.focused]: focused,
       [styles.ie11]: isIE11
     }
+    const ElementType = getElementType(TreeButton, this.props)
 
     // VoiceOver can't navigate without the buttons, even though they don't do anything
     return (
-      <button tabIndex={-1} type="button" className={classnames(classes)}>
+      <ElementType tabIndex={-1} className={classnames(classes)}>
         <span className={styles.layout}>
           {this.renderImage()}
           <span className={styles.text}>
@@ -154,9 +166,10 @@ class TreeButton extends Component {
                 {descriptor}
               </span>
             ) : null}
+            {children && safeCloneElement(children, { onBlur: onBlur })}
           </span>
         </span>
-      </button>
+      </ElementType>
     )
   }
 }

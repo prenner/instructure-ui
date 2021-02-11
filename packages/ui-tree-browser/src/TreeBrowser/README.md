@@ -208,9 +208,9 @@ example: true
 />
 ```
 
-### Collection Children
+### Collection Props
 
-An example of a `<TreeBrowser />` with different collection children.
+An example of a `<TreeBrowser />` with different collection props.
 
 ```js
 ---
@@ -218,14 +218,17 @@ example: true
 ---
 <TreeBrowser
   collections={{
-    1: { id: 1, name: "Grade 1", collections: [2], children: <Link href="https://instructure.design">Learn more!</Link> },
+    1: {
+      id: 1,
+      name: "Grade 1",
+      collections: [2],
+    },
     2: {
       id: 2,
       name: "Math Outcomes",
       collections: [],
       items: [1, 2],
-      descriptor: "1 Group | 2 Outcomes",
-      children: <Button margin="0 medium" onClick={(e) => e.stopPropagation()} margin="0 medium">Add more!</Button>
+      descriptor: "1 Group | 2 Outcomes"
     }
   }}
   items={{

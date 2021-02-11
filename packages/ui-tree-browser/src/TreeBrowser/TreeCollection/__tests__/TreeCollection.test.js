@@ -23,7 +23,13 @@
  */
 
 import React from 'react'
-import { expect, mount, stub, locator } from '@instructure/ui-test-utils'
+import {
+  expect,
+  mount,
+  stub,
+  locator,
+  within
+} from '@instructure/ui-test-utils'
 
 import { TreeCollection } from '../index'
 
@@ -138,30 +144,41 @@ describe('<TreeCollection />', async () => {
       expect(item.getAttribute('aria-selected')).to.exist()
     })
 
-    it('should render children for root and child collections', async () => {
-      await mount(
+    it('should render before, after collection content', async () => {
+      const contentBeforeSVG = (
+        <svg height="24" width="24">
+          <title>Content before</title>
+          <circle cx="50" cy="50" r="40" />
+        </svg>
+      )
+
+      const contentAfterSVG = (
+        <svg height="24" width="24">
+          <title>Content after</title>
+          <circle cx="50" cy="50" r="40" />
+        </svg>
+      )
+
+      const subject = await mount(
         <TreeCollection
           id={1}
           name="Coll 1"
-          collections={[
-            {
-              id: 2,
-              name: 'Coll 2',
-              descriptor: 'Another Descriptor',
-              children: <input id="input-two" />
-            }
-          ]}
+          collections={[]}
           items={[]}
-          collectionIcon={() => IconFolder}
-          collectionIconExpanded={() => IconFolder}
-          itemIcon={() => IconDocument}
+          beforeCollection={contentBeforeSVG}
+          afterCollection={contentAfterSVG}
           expanded={true}
-        >
-          <input id="input-one" />
-        </TreeCollection>
+        />
       )
-      expect(await find('#input-one')).to.exist()
-      expect(await find('#input-two')).to.exist()
+
+      const textInput = within(subject.getDOMNode())
+      const contentBefore = await textInput.find(
+        'svg:withTitle(Content before)'
+      )
+      expect(contentBefore).to.exist()
+
+      const contentAfter = await textInput.find('svg:withTitle(Content after)')
+      expect(contentAfter).to.exist()
     })
 
     describe('onCollectionClick', async () => {

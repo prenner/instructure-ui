@@ -34,6 +34,7 @@ import { controllable } from '@instructure/ui-prop-types'
 import { testable } from '@instructure/ui-testable'
 
 import { TreeCollection } from './TreeCollection'
+import { TreeButton } from './TreeButton'
 
 import styles from './styles.css'
 import theme from './theme'
@@ -50,8 +51,8 @@ class TreeBrowser extends Component {
     /**
      * a normalized hash of collections, keyed by id, that contain an
      * :id, :name, :items (an array of item ids), :collections (an array of
-     * collection ids), optional :descriptor text, and an optional :children
-     * node.
+     * collection ids), optional :descriptor text, an optional
+     * :beforeCollection TreeButton, and an optional :afterCollection TreeButton.
      * Each collection must have a unique id.
      */
     collections: PropTypes.object.isRequired,
@@ -350,7 +351,8 @@ class TreeBrowser extends Component {
       expanded: this.getExpandedIndex(this.expanded, collection.id) >= 0,
       items: this.getItems(collection),
       collections: this.getSubCollections(collection),
-      children: collection.children
+      beforeCollection: collection.beforeCollection,
+      afterCollection: collection.afterCollection
     }
 
     return props
@@ -373,9 +375,7 @@ class TreeBrowser extends Component {
         numChildren={this.collections.length}
         level={1}
         position={1}
-      >
-        {collection.children}
-      </TreeCollection>
+      />
     ))
   }
 
@@ -398,4 +398,4 @@ class TreeBrowser extends Component {
 }
 
 export default TreeBrowser
-export { TreeBrowser }
+export { TreeBrowser, TreeButton }

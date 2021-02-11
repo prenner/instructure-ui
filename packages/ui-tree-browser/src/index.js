@@ -21,4 +21,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export { TreeBrowser } from './TreeBrowser'
+export { TreeBrowser, TreeButton } from './TreeBrowser'
