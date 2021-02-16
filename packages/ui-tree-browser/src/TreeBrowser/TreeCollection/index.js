@@ -22,18 +22,20 @@
  * SOFTWARE.
  */
 
-import React, { Component } from 'react'
+import React, { Component, Children } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
 import { themeable } from '@instructure/ui-themeable'
 import { testable } from '@instructure/ui-testable'
 import { safeCloneElement } from '@instructure/ui-react-utils'
+import { Children as ChildrenPropTypes } from '@instructure/ui-prop-types'
 // remove when Edge sorts out styles-on-pseudo-elements issues:
 // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11495448/
-import { isEdge, createChainedFunction } from '@instructure/ui-utils'
+import { isEdge } from '@instructure/ui-utils'
 
 import { TreeButton } from '../TreeButton'
+import { TreeNode } from '../TreeNode'
 
 import styles from './styles.css'
 import theme from './theme'
@@ -70,8 +72,8 @@ class TreeCollection extends Component {
     numChildren: PropTypes.number,
     level: PropTypes.number,
     position: PropTypes.number,
-    beforeCollection: PropTypes.node,
-    afterCollection: PropTypes.node
+    beforeCollection: ChildrenPropTypes.oneOf([TreeNode]),
+    afterCollection: ChildrenPropTypes.oneOf([TreeNode])
   }
 
   static defaultProps = {
@@ -151,7 +153,12 @@ class TreeCollection extends Component {
   }
 
   get childCount() {
-    return this.collectionsCount + this.itemsCount
+    return (
+      this.collectionsCount +
+      this.itemsCount +
+      (this.props.beforeCollection ? 1 : 0) +
+      (this.props.afterCollection ? 1 : 0)
+    )
   }
 
   renderChildren() {
@@ -165,24 +172,32 @@ class TreeCollection extends Component {
       afterCollection
     } = this.props
     const showList = this.childCount > 0 || beforeCollection || afterCollection
+    let position = 1
     return (
       expanded && (
         <>
           {showList && (
             <ul aria-label={name} className={styles.list} role="group">
-              {this.renderCollectionChildren(id, beforeCollection, 'before')}
-              {collections.map((collection, i) => {
-                return this.renderCollectionNode(collection, i, this.childCount)
+              {beforeCollection &&
+                this.renderCollectionChildren(
+                  id,
+                  beforeCollection,
+                  position++,
+                  'before'
+                )}
+              {collections.map((collection) => {
+                return this.renderCollectionNode(collection, position++)
               })}
-              {items.map((item, i) => {
-                return this.renderItemNode(
-                  item,
-                  i,
-                  this.childCount,
-                  this.collectionsCount
-                )
+              {items.map((item) => {
+                return this.renderItemNode(item, position++)
               })}
-              {this.renderCollectionChildren(id, afterCollection, 'after')}
+              {afterCollection &&
+                this.renderCollectionChildren(
+                  id,
+                  afterCollection,
+                  position++,
+                  'after'
+                )}
             </ul>
           )}
         </>
@@ -190,79 +205,76 @@ class TreeCollection extends Component {
     )
   }
 
-  renderCollectionChildren(collectionId, child, arg) {
-    const {
-      selection,
-      onKeyDown,
-      onItemClick,
-      getItemProps,
-      level
-    } = this.props
-    if (!child) {
-      return
-    }
+  renderCollectionChildren(collectionId, child, position, keyword) {
+    const { selection, onKeyDown, getItemProps, level } = this.props
+    const key = `${collectionId}_${keyword}`
     const ariaSelected = {}
-    const key = `${collectionId}_${arg}`
     if (selection) {
-      ariaSelected['aria-selected'] = selection === `item_${key}`
+      ariaSelected['aria-selected'] = selection === `child_${key}`
     }
 
-    const itemHash = { id: key, type: 'item' }
+    const itemHash = { id: key, type: 'child' }
 
     const itemProps = getItemProps({
-      selected: selection === `item_${key}`,
-      focused: this.state.focused === `item_${key}` ? true : false,
-      onBlur: (e) => {
-        this[`${key}_ref`].focus()
-        e.stopPropagation()
-      }
+      key: key,
+      selected: selection === `child_${key}`,
+      focused: this.state.focused === `child_${key}`
     })
 
     return (
       <li
+        id={key}
         role="treeitem"
         className={styles.item}
         tabIndex="-1"
         key={key}
-        ref={(element) => (this[`${key}_ref`] = element)}
+        aria-posinset={position}
+        aria-setsize={this.childCount}
         aria-level={level + 1}
         {...ariaSelected}
+        onClick={(e, n) => {
+          if (typeof child.props.onClick === 'function') {
+            child.props.onClick(e, n)
+          } else {
+            e.stopPropagation()
+          }
+        }}
         onFocus={(e, n) => this.handleFocus(e, itemHash)}
-        onClick={(e, n) =>
-          createChainedFunction(
-            child.props?.onClick(e, itemHash),
-            onItemClick(e, itemHash)
-          )
-        }
-        onKeyDown={(e, n) => onKeyDown(e, itemHash)}
+        onKeyDown={(e, n) => {
+          if (typeof child.props.onKeyDown === 'function') {
+            child.props.onKeyDown(e, n)
+          } else {
+            onKeyDown(e, itemHash)
+          }
+        }}
         onBlur={(e, n) => this.handleBlur(e, itemHash)}
       >
-        {safeCloneElement(child, { ...itemProps })}
+        {safeCloneElement(child, itemProps)}
       </li>
     )
   }
 
-  renderCollectionNode(collection, i, childCount) {
+  renderCollectionNode(collection, position) {
     return (
       <TreeCollection
         {...this.props}
-        key={`c${i}`}
+        key={`c${position}`}
         id={collection.id}
         name={collection.name}
         descriptor={collection.descriptor}
         expanded={collection.expanded}
         items={collection.items}
         collections={collection.collections}
-        numChildren={childCount}
+        numChildren={this.childCount}
         level={this.props.level + 1}
-        position={i + 1}
+        position={position}
         beforeCollection={collection.beforeCollection}
         afterCollection={collection.afterCollection}
       />
     )
   }
 
-  renderItemNode(item, i, numChildren, numCollections) {
+  renderItemNode(item, position) {
     const {
       selection,
       level,
@@ -292,14 +304,14 @@ class TreeCollection extends Component {
 
     return (
       <li
-        key={`i${i}`}
+        key={`i${position}`}
         tabIndex="-1"
         role="treeitem"
         aria-label={item.name}
         className={styles.item}
         aria-level={level + 1}
-        aria-posinset={i + 1 + numCollections}
-        aria-setsize={numChildren}
+        aria-posinset={position}
+        aria-setsize={this.childCount}
         onClick={(e, n) => onItemClick(e, itemHash)}
         onKeyDown={(e, n) => onKeyDown(e, itemHash)}
         onFocus={(e, n) => this.handleFocus(e, itemHash)}

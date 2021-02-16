@@ -34,7 +34,7 @@ import { controllable } from '@instructure/ui-prop-types'
 import { testable } from '@instructure/ui-testable'
 
 import { TreeCollection } from './TreeCollection'
-import { TreeButton } from './TreeButton'
+import { TreeNode } from './TreeNode'
 
 import styles from './styles.css'
 import theme from './theme'
@@ -251,7 +251,8 @@ class TreeBrowser extends Component {
 
   moveFocus(delta) {
     const nodes = this.getNavigableNodes()
-    const active = nodes.indexOf(window.document.activeElement)
+    const closest = window.document.activeElement.closest('[role="treeitem"]')
+    const active = nodes.indexOf(closest)
     let next = active + delta
     if (next < 0) {
       next = 0
@@ -398,4 +399,4 @@ class TreeBrowser extends Component {
 }
 
 export default TreeBrowser
-export { TreeBrowser, TreeButton }
+export { TreeBrowser, TreeNode }

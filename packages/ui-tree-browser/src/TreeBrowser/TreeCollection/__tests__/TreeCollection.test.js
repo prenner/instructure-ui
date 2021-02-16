@@ -144,43 +144,6 @@ describe('<TreeCollection />', async () => {
       expect(item.getAttribute('aria-selected')).to.exist()
     })
 
-    it('should render before, after collection content', async () => {
-      const contentBeforeSVG = (
-        <svg height="24" width="24">
-          <title>Content before</title>
-          <circle cx="50" cy="50" r="40" />
-        </svg>
-      )
-
-      const contentAfterSVG = (
-        <svg height="24" width="24">
-          <title>Content after</title>
-          <circle cx="50" cy="50" r="40" />
-        </svg>
-      )
-
-      const subject = await mount(
-        <TreeCollection
-          id={1}
-          name="Coll 1"
-          collections={[]}
-          items={[]}
-          beforeCollection={contentBeforeSVG}
-          afterCollection={contentAfterSVG}
-          expanded={true}
-        />
-      )
-
-      const textInput = within(subject.getDOMNode())
-      const contentBefore = await textInput.find(
-        'svg:withTitle(Content before)'
-      )
-      expect(contentBefore).to.exist()
-
-      const contentAfter = await textInput.find('svg:withTitle(Content after)')
-      expect(contentAfter).to.exist()
-    })
-
     describe('onCollectionClick', async () => {
       it('should return the correct collection params on click', async () => {
         const onCollectionClick = stub()

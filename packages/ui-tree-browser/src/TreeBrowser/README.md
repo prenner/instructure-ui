@@ -222,13 +222,15 @@ example: true
       id: 1,
       name: "Grade 1",
       collections: [2],
+      afterCollection: <TreeNode variant="indent">All Grade 1 outcomes</TreeNode>
     },
     2: {
       id: 2,
       name: "Math Outcomes",
       collections: [],
       items: [1, 2],
-      descriptor: "1 Group | 2 Outcomes"
+      descriptor: "1 Group | 2 Outcomes",
+      beforeCollection: <TreeNode variant="indent">Search for more math outcomes!</TreeNode>
     }
   }}
   items={{

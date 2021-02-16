@@ -25,6 +25,7 @@
 import React from 'react'
 import { expect, mount, stub, wait } from '@instructure/ui-test-utils'
 import { TreeBrowser } from '../index'
+import { TreeNode } from '../TreeNode'
 
 import { TreeBrowserLocator } from '../TreeBrowserLocator'
 
@@ -395,7 +396,7 @@ describe('<TreeBrowser />', async () => {
       })
     })
 
-    it('should render children of the provided collection', async () => {
+    it('should render before, after nodes of the provided collection', async () => {
       await mount(
         <TreeBrowser
           collections={{
@@ -404,14 +405,28 @@ describe('<TreeBrowser />', async () => {
               name: 'Root Directory',
               collections: [],
               items: [],
-              children: <input id="input-one" />
+              beforeCollection: (
+                <TreeNode>
+                  <input id="input-before" />
+                </TreeNode>
+              ),
+              afterCollection: (
+                <TreeNode>
+                  <input id="input-after" />
+                </TreeNode>
+              )
             }
           }}
           items={{}}
+          expanded={[2]}
           rootId={2}
         />
       )
-      expect(await find('#input-one')).to.exist()
+      const tree = await TreeBrowserLocator.find()
+      const contentBefore = await tree.find('#input-before')
+      expect(contentBefore).to.exist()
+      const contentAfter = await tree.find('#input-after')
+      expect(contentAfter).to.exist()
     })
   })
 
