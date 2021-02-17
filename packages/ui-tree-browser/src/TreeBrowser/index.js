@@ -34,7 +34,7 @@ import { controllable } from '@instructure/ui-prop-types'
 import { testable } from '@instructure/ui-testable'
 
 import { TreeCollection } from './TreeCollection'
-import { TreeButton } from './TreeButton'
+import { TreeNode } from './TreeNode'
 
 import styles from './styles.css'
 import theme from './theme'
@@ -51,7 +51,8 @@ class TreeBrowser extends Component {
     /**
      * a normalized hash of collections, keyed by id, that contain an
      * :id, :name, :items (an array of item ids), :collections (an array of
-     * collection ids), and optional :descriptor text.
+     * collection ids), optional :descriptor text, an optional
+     * :beforeCollection TreeNode, and an optional :afterCollection TreeNode.
      * Each collection must have a unique id.
      */
     collections: PropTypes.object.isRequired,
@@ -130,6 +131,8 @@ class TreeBrowser extends Component {
     expanded: undefined,
     treeLabel: undefined
   }
+
+  static Node = TreeNode
 
   constructor(props) {
     super(props)
@@ -250,7 +253,8 @@ class TreeBrowser extends Component {
 
   moveFocus(delta) {
     const nodes = this.getNavigableNodes()
-    const active = nodes.indexOf(window.document.activeElement)
+    const closest = window.document.activeElement.closest('[role="treeitem"]')
+    const active = nodes.indexOf(closest)
     let next = active + delta
     if (next < 0) {
       next = 0
@@ -349,7 +353,9 @@ class TreeBrowser extends Component {
       descriptor: collection.descriptor,
       expanded: this.getExpandedIndex(this.expanded, collection.id) >= 0,
       items: this.getItems(collection),
-      collections: this.getSubCollections(collection)
+      collections: this.getSubCollections(collection),
+      beforeCollection: collection.beforeCollection,
+      afterCollection: collection.afterCollection
     }
 
     return props

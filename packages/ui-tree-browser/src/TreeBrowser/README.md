@@ -36,6 +36,7 @@ example: true
 ```
 
 ### Managing State
+
 `<TreeBrowser />` can be fully controlled. The following example uses the `onCollectionToggle` callback function to set the state. It then uses the `expanded` prop to configure which collections are open or closed.
 
 ```js
@@ -105,6 +106,7 @@ render(<Example/>)
 ```
 
 ### Customizing Icons
+
 All of the `<TreeBrowser>` icons are customizable. The following example sets custom icons for the expanded and collapsed state of the collections along with each of the items.
 
 ```js
@@ -177,8 +179,8 @@ example: true
 />
 ```
 
-
 ### Thumbnails
+
 An example of a `<TreeBrowser />` with thumbnail images.
 
 ```js
@@ -205,6 +207,43 @@ example: true
   size="large"
 />
 ```
+
+### Collection Props
+
+An example of a `<TreeBrowser />` with different collection props.
+
+```js
+---
+example: true
+---
+<TreeBrowser
+  collections={{
+    1: {
+      id: 1,
+      name: "Grade 1",
+      collections: [2],
+      afterCollection: <TreeBrowser.Node variant="indent"><Button>All Grade 1 outcomes</Button></TreeBrowser.Node>
+    },
+    2: {
+      id: 2,
+      name: "Math Outcomes",
+      collections: [],
+      items: [1, 2],
+      descriptor: "1 Group | 2 Outcomes",
+      beforeCollection: <TreeBrowser.Node variant="indent"><Spinner renderTitle={'Loading..'} size="small"/></TreeBrowser.Node>
+    }
+  }}
+  items={{
+    1: { id: 1, name: "Can add" },
+    2: { id: 2, name: "Can subtract" },
+  }}
+  defaultExpanded={[1]}
+  itemIcon={IconUserSolid}
+  rootId={1}
+  size="large"
+/>
+```
+
 ### Guidelines
 
 ```js
