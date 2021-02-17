@@ -52,7 +52,7 @@ class TreeBrowser extends Component {
      * a normalized hash of collections, keyed by id, that contain an
      * :id, :name, :items (an array of item ids), :collections (an array of
      * collection ids), optional :descriptor text, an optional
-     * :beforeCollection TreeButton, and an optional :afterCollection TreeButton.
+     * :beforeCollection TreeNode, and an optional :afterCollection TreeNode.
      * Each collection must have a unique id.
      */
     collections: PropTypes.object.isRequired,

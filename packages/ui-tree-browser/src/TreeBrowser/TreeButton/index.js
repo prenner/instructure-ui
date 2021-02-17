@@ -65,7 +65,6 @@ class TreeButton extends Component {
   }
 
   static defaultProps = {
-    as: 'button',
     type: 'treeButton',
     size: 'medium',
     variant: 'folderTree',
@@ -108,6 +107,7 @@ class TreeButton extends Component {
 
   renderItemImage() {
     const { thumbnail, itemIcon } = this.props
+
     if (thumbnail) {
       return (
         <div className={styles.thumbnail}>

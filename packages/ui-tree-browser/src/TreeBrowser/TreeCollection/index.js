@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-import React, { Component, Children } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
 import { themeable } from '@instructure/ui-themeable'
 import { testable } from '@instructure/ui-testable'
+
 import { safeCloneElement } from '@instructure/ui-react-utils'
 import { Children as ChildrenPropTypes } from '@instructure/ui-prop-types'
 // remove when Edge sorts out styles-on-pseudo-elements issues:
@@ -171,36 +172,33 @@ class TreeCollection extends Component {
       beforeCollection,
       afterCollection
     } = this.props
-    const showList = this.childCount > 0 || beforeCollection || afterCollection
+
     let position = 1
     return (
-      expanded && (
-        <>
-          {showList && (
-            <ul aria-label={name} className={styles.list} role="group">
-              {beforeCollection &&
-                this.renderCollectionChildren(
-                  id,
-                  beforeCollection,
-                  position++,
-                  'before'
-                )}
-              {collections.map((collection) => {
-                return this.renderCollectionNode(collection, position++)
-              })}
-              {items.map((item) => {
-                return this.renderItemNode(item, position++)
-              })}
-              {afterCollection &&
-                this.renderCollectionChildren(
-                  id,
-                  afterCollection,
-                  position++,
-                  'after'
-                )}
-            </ul>
-          )}
-        </>
+      expanded &&
+      this.childCount > 0 && (
+        <ul aria-label={name} className={styles.list} role="group">
+          {beforeCollection &&
+            this.renderCollectionChildren(
+              id,
+              beforeCollection,
+              position++,
+              'before'
+            )}
+          {collections.map((collection) => {
+            return this.renderCollectionNode(collection, position++)
+          })}
+          {items.map((item) => {
+            return this.renderItemNode(item, position++)
+          })}
+          {afterCollection &&
+            this.renderCollectionChildren(
+              id,
+              afterCollection,
+              position++,
+              'after'
+            )}
+        </ul>
       )
     )
   }

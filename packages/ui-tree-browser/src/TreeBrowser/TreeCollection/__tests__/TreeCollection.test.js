@@ -23,13 +23,7 @@
  */
 
 import React from 'react'
-import {
-  expect,
-  mount,
-  stub,
-  locator,
-  within
-} from '@instructure/ui-test-utils'
+import { expect, mount, stub, locator } from '@instructure/ui-test-utils'
 
 import { TreeCollection } from '../index'
 

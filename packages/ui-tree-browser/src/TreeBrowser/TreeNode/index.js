@@ -54,10 +54,11 @@ class TreeNode extends Component {
      */
     children: PropTypes.node,
     /**
-     *
-     * A function that returns a reference to the parent element
+     * A function that returns a reference to the parent <li> element
      */
-    containerRef: PropTypes.func
+    containerRef: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onClick: PropTypes.func
   }
 
   static defaultProps = {
@@ -68,7 +69,9 @@ class TreeNode extends Component {
     focused: false,
     children: undefined,
     containerRef: function () {},
-    parentRef: undefined
+    parentRef: undefined,
+    onKeyDown: undefined,
+    onClick: undefined
   }
 
   handleRef = (el) => {
@@ -90,7 +93,7 @@ class TreeNode extends Component {
     }
 
     return (
-      <div ref={this.handleRef} tabIndex="-1" className={classnames(classes)}>
+      <div ref={this.handleRef} tabIndex={-1} className={classnames(classes)}>
         {children}
       </div>
     )
