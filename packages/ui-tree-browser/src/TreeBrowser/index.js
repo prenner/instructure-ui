@@ -132,6 +132,8 @@ class TreeBrowser extends Component {
     treeLabel: undefined
   }
 
+  static Node = TreeNode
+
   constructor(props) {
     super(props)
 
@@ -399,4 +401,4 @@ class TreeBrowser extends Component {
 }
 
 export default TreeBrowser
-export { TreeBrowser, TreeNode }
+export { TreeBrowser }
