@@ -1607,6 +1607,145 @@
   resolved "https://registry.npmjs.org/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
+"@instructure/ui-code-editor@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-code-editor/-/ui-code-editor-7.4.1.tgz#da650b54ca1cfd1d452628b0edae35006e887ff7"
+  integrity sha512-IdoNlnFf+tVnIJ3M220DhBiuf6GreY/a27xIl5NUOPS9NW0TwukEzzdtO6Gm17EnYwJ//L9ze3hNXyK5VFNmZQ==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/ui-a11y-content" "^7.4.1"
+    "@instructure/ui-color-utils" "^7.4.1"
+    "@instructure/ui-dom-utils" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-test-locator" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/uid" "^7.4.1"
+    classnames "^2"
+    codemirror "^5.48.4"
+    prop-types "^15"
+    react-codemirror2 "^7.1.0"
+
+"@instructure/ui-file-drop@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-file-drop/-/ui-file-drop-7.4.1.tgz#ac708d39cb4a6a28513b5a855e53383b760040f8"
+  integrity sha512-eEK4J1ENIRq+nK7Ssds9FczaXVkSch1jE+N8ZdavkbgNrfqM7ryFBB3V/jVrzPjCezqVbuU9fp+ceHQDrKbPKQ==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/console" "^7.4.1"
+    "@instructure/ui-color-utils" "^7.4.1"
+    "@instructure/ui-form-field" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/ui-utils" "^7.4.1"
+    "@instructure/ui-view" "^7.4.1"
+    "@instructure/uid" "^7.4.1"
+    classnames "^2"
+    keycode "^2"
+    prop-types "^15"
+
+"@instructure/ui-menu@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-menu/-/ui-menu-7.4.1.tgz#e0e14f9e8dfb985de6f2b9e2937255381df5afbd"
+  integrity sha512-CAy0HnroL1KUmT1wLUIhlN2m1vUMrqlH1bYAJ6oNvTCCCNhUgbDrG2I96MYxP2aMTYJVz29IDTTmGQFOliTNkg==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/console" "^7.4.1"
+    "@instructure/ui-a11y-utils" "^7.4.1"
+    "@instructure/ui-dom-utils" "^7.4.1"
+    "@instructure/ui-icons" "^7.4.1"
+    "@instructure/ui-popover" "^7.4.1"
+    "@instructure/ui-position" "^7.4.1"
+    "@instructure/ui-prop-types" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/ui-utils" "^7.4.1"
+    "@instructure/uid" "^7.4.1"
+    classnames "^2"
+    keycode "^2"
+    prop-types "^15"
+
+"@instructure/ui-modal@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-modal/-/ui-modal-7.4.1.tgz#73715d4590b6df4784366e19e71888f5b2d1a387"
+  integrity sha512-f6W4zDBE6L8nDfyCpnIzpY/skqwk3pndfXXbezEogYMNEiI+0wahSr6ti/9UeLs3KxDk1IfpgX9KIB5DmPQ+IQ==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/console" "^7.4.1"
+    "@instructure/ui-buttons" "^7.4.1"
+    "@instructure/ui-dialog" "^7.4.1"
+    "@instructure/ui-motion" "^7.4.1"
+    "@instructure/ui-overlays" "^7.4.1"
+    "@instructure/ui-portal" "^7.4.1"
+    "@instructure/ui-prop-types" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/ui-utils" "^7.4.1"
+    "@instructure/ui-view" "^7.4.1"
+    classnames "^2"
+    prop-types "^15"
+
+"@instructure/ui-popover@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-popover/-/ui-popover-7.4.1.tgz#796559aaacf0ab8d38f78486c8f9649d53783a65"
+  integrity sha512-TK3IjEJASbHnfIm3I9Gjznv9JGuTphJ8IZoFnuFh7xjjtJTio1lFmlHGGC4CvlfI17SA8Typkp6iROajsqQVlA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/console" "^7.4.1"
+    "@instructure/ui-a11y-utils" "^7.4.1"
+    "@instructure/ui-dialog" "^7.4.1"
+    "@instructure/ui-dom-utils" "^7.4.1"
+    "@instructure/ui-i18n" "^7.4.1"
+    "@instructure/ui-position" "^7.4.1"
+    "@instructure/ui-prop-types" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/ui-utils" "^7.4.1"
+    "@instructure/ui-view" "^7.4.1"
+    "@instructure/uid" "^7.4.1"
+    keycode "^2"
+    prop-types "^15"
+
+"@instructure/ui-radio-input@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-radio-input/-/ui-radio-input-7.4.1.tgz#6304ae5e30e68afed9a9140d2caa4f80a80d0ab8"
+  integrity sha512-ww3SzumQd9dHDeMpAO9EFaU/Wu/xpXagj7hp+qDRlQzJpQOUQipfwMVSGGOQxz7+DRithGhTObYFXcA3PWkozA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/ui-dom-utils" "^7.4.1"
+    "@instructure/ui-form-field" "^7.4.1"
+    "@instructure/ui-prop-types" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/uid" "^7.4.1"
+    classnames "^2"
+    prop-types "^15"
+
+"@instructure/ui-tray@^7.4.1":
+  version "7.4.1"
+  resolved "https://registry.npmjs.org/@instructure/ui-tray/-/ui-tray-7.4.1.tgz#437a2cf433720ca7c360c6f9af561c9e0a9bf567"
+  integrity sha512-rHBH0/XWnkuLYe6cBvF2c0cvS/ZT1fmIjh/bmvXzm0ITmIotq9ZeYirrm9ZagnCT8IzPywQYIa8DQbSsKVsJ+A==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@instructure/console" "^7.4.1"
+    "@instructure/ui-dialog" "^7.4.1"
+    "@instructure/ui-i18n" "^7.4.1"
+    "@instructure/ui-motion" "^7.4.1"
+    "@instructure/ui-portal" "^7.4.1"
+    "@instructure/ui-position" "^7.4.1"
+    "@instructure/ui-prop-types" "^7.4.1"
+    "@instructure/ui-react-utils" "^7.4.1"
+    "@instructure/ui-testable" "^7.4.1"
+    "@instructure/ui-themeable" "^7.4.1"
+    "@instructure/ui-utils" "^7.4.1"
+    classnames "^2"
+    prop-types "^15"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@istanbuljs/load-nyc-config/-/load-nyc-config-1.0.0.tgz#10602de5570baea82f8afbfa2630b24e7a8cfe5b"
